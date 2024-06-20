@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1007210607013",
+    "project_id": "imob-expert",
+    "storage_bucket": "imob-expert.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007210607013:android:c0607944f381c430f1384c",
+        "android_client_info": {
+          "package_name": "com.example.imob_expert"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBx5HAlrIIgqTEuuGVnbixHuGXOFCpdGFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
