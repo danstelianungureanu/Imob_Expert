@@ -28,7 +28,9 @@ Privacy Policy
 
 Introduction This Privacy Policy describes how we collect, use, and protect your personal information. We are committed to protecting your privacy and handling your personal data in a transparent manner.
 
-Information We Collect We collect the following types of information:
+Information We Collect.
+
+We collect the following types of information:
 
 Personal Identification Information: Name, email address, phone number, etc. Usage Information: Data regarding how you use our website, including IP addresses, browser types, and pages visited. Third-Party Information: We may receive information about you from third parties, such as business partners. 3. How We Use Information We use the collected information for the following purposes:
 
