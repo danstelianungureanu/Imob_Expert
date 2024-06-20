@@ -66,7 +66,7 @@ class _PaymentPageState extends State<PaymentPage> {
           title: const Text('Confirmare'),
           content: Text(
             'Acest cont v-a fi suplinit cu $amount MDL.\nDacă confirmi, te rugam să te loghezi din nou.',
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.red,
             ),
           ),

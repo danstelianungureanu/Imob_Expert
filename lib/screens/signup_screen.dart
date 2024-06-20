@@ -7,6 +7,7 @@ import 'package:imob_expert/screens/home_screen.dart';
 import 'package:imob_expert/screens/login_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final _firebase = FirebaseAuth.instance;
 final _firebaseFirestore = FirebaseFirestore.instance;
@@ -32,6 +33,17 @@ class _SignUpState extends State<SignUp> {
   bool _passwordVisivel = false;
   bool _passwordConfirmVisivel = false;
   bool agree = false;
+
+  // Funcția pentru a lansa URL-ul
+  void _launchURL() async {
+    final url = Uri.parse(
+        'https://math-web-rust.vercel.app/README.md'); // Înlocuiește cu link-ul dorit
+    if (await canLaunchUrl(url)) {
+      await canLaunchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   void _submit() async {
     if (agree) {
@@ -254,7 +266,7 @@ class _SignUpState extends State<SignUp> {
                     TextFormField(
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Te rugam introdu data corecta !";
+                          return "Te rugăm introdu data corectă !";
                         }
                         return null;
                       },
@@ -543,18 +555,29 @@ class _SignUpState extends State<SignUp> {
                         }),
                     const SizedBox(height: 10),
                     CheckboxListTile(
-                      title: const Text(
-                        'Sunt de acord cu Termenii și Condițiile și Politica de confidențialitate',
-                        style: TextStyle(color: Colors.black),
-                      ),
                       activeColor: const Color.fromRGBO(26, 147, 192, 1),
                       controlAffinity: ListTileControlAffinity.leading,
-                      value: agree,
-                      onChanged: (newValue) {
+                      value:
+                          agree, // Variabila booleană pentru a controla starea checkbox-ului
+                      onChanged: (bool? newValue) {
                         setState(() {
                           agree = newValue!;
+                          print('Checkbox apasat : $agree');
                         });
                       },
+                      title: TextButton(
+                        onPressed: () {
+                          _launchURL; // Apelăm funcția pentru a lansa URL-ul
+                          print('Butonul a fost apasat');
+                        },
+                        child: const Text(
+                          'Sunt de acord cu Termenii și Condițiile și Politica de confidențialitate',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        // activeColor: const Color.fromRGBO(26, 147, 192, 1),
+                        // controlAffinity: ListTileControlAffinity.leading,
+                        // value: agree,
+                      ),
                     ),
 
                     //
