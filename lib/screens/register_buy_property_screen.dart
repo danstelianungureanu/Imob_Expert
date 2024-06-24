@@ -193,29 +193,6 @@ class _RegisterBuyPropertyScreenState extends State<RegisterBuyPropertyScreen> {
     }
   }
 
-  // Future<List<String>> _uploadImagesToStorage() async {
-  // List<String> imageUrls = [];
-
-  //   for (XFile imageFile in _imageFileList!) {
-  //     String imageUrl = await _uploadImageToStorage(imageFile);
-  //     imageUrls.add(imageUrl);
-  //   }
-  //   return imageUrls;
-  // }
-
-  // Future<String> _uploadImageToStorage(XFile imageFile) async {
-  //   File file = File(imageFile.path);
-  //   String generateImageName = const Uuid().v4();
-  //   final storageRef = FirebaseStorage.instance
-  //       .ref()
-  //       .child('user_imobil_images')
-  //       .child('$generateImageName.jpg');
-  //   await storageRef.putFile(file);
-
-  //   final imageUrl = await storageRef.getDownloadURL();
-  //   return imageUrl;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -256,15 +233,23 @@ class _RegisterBuyPropertyScreenState extends State<RegisterBuyPropertyScreen> {
               TextFormField(
                 controller: _addressController,
                 validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                    value == null || value.isEmpty ? 'Câmp obligatoriu.' : null,
                 decoration:
                     customInputDecoration(hintText: 'Locație si adresă'),
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: _priceController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputDecoration(hintText: "Preț"),
               ),
@@ -298,8 +283,16 @@ class _RegisterBuyPropertyScreenState extends State<RegisterBuyPropertyScreen> {
               ),
               TextFormField(
                 controller: _bathroomController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Băi', prefixIcon: Icons.bathtub),
@@ -307,8 +300,14 @@ class _RegisterBuyPropertyScreenState extends State<RegisterBuyPropertyScreen> {
               const SizedBox(height: 10),
               TextFormField(
                 controller: _roomsController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(RegExp(r'[A-Za-z]'))) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Dormitoare', prefixIcon: Icons.bed_outlined),
@@ -316,8 +315,16 @@ class _RegisterBuyPropertyScreenState extends State<RegisterBuyPropertyScreen> {
               const SizedBox(height: 10),
               TextFormField(
                 controller: _squareMetersController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Metri pătrați',
@@ -326,8 +333,16 @@ class _RegisterBuyPropertyScreenState extends State<RegisterBuyPropertyScreen> {
               const SizedBox(height: 10),
               TextFormField(
                 controller: _floorController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Etaj', prefixIcon: Icons.stairs_outlined),

@@ -1,16 +1,19 @@
 // ignore_for_file: avoid_print, avoid_function_literals_in_foreach_calls
 
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:imob_expert/database/Models/house_model.dart';
 import 'package:imob_expert/screens/property_details_screen.dart';
+import 'package:imob_expert/widgets/alert_dialog.dart';
 import 'property_card_widget.dart';
 
 class PropertyListWidget extends StatelessWidget {
   final String searchRegion;
+  final User? user = FirebaseAuth.instance.currentUser;
 
-  const PropertyListWidget({super.key, required this.searchRegion});
+  PropertyListWidget({super.key, required this.searchRegion});
 
   Future<List<HouseModel>> _fetchAllProperties() async {
     QuerySnapshot vanzariSnapshot;
@@ -72,8 +75,8 @@ class PropertyListWidget extends StatelessWidget {
 
       // Iterăm prin documentele din colecție
       querySnapshot.docs.forEach((doc) {
-        print('ID document: ${doc.id}');
-        print('Data document: ${doc.data()}');
+        // print('ID document: ${doc.id}');
+        // print('Data document: ${doc.data()}');
         // Aici poți procesa datele fiecărui document cum dorești
       });
     } catch (e) {
@@ -114,15 +117,19 @@ class PropertyListWidget extends StatelessWidget {
               bathroom: imovel.bathroom,
               squareMeters: imovel.squareMeters,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PropertyDetailScreen(
-                      imovel: imovel,
-                      // phoneNumber: '',
+                if (user == null) {
+                  alertDialog(context);
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PropertyDetailScreen(
+                        imovel: imovel,
+                        // phoneNumber: '',
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               },
               onDelete: null,
               // onDelete: () async {},

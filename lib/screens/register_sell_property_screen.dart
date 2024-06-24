@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
 
 import 'dart:io';
 
@@ -24,7 +24,6 @@ class RegisterSellPropertyScreen extends StatefulWidget {
     super.key,
     required this.propertyType,
     required this.phoneNumber,
-    // required phoneNumber,
   });
 
   @override
@@ -36,6 +35,7 @@ class _RegisterSellPropertyScreenState
     extends State<RegisterSellPropertyScreen> {
   final _formKey = GlobalKey<FormState>();
   List<XFile>? _imageFileList = [];
+  String _imageError = '';
 
   final HouseModel _imobil = HouseModel(
     type: '',
@@ -139,11 +139,6 @@ class _RegisterSellPropertyScreenState
     _imobil.type = widget.propertyType; // Setează tipul de proprietate selectat
   }
 
-  // bool containsSpecialRomanianCharacters(String input) {
-  //   final pattern = RegExp(r'[șăîâț]');
-  //   return pattern.hasMatch(input);
-  // }
-
   String replaceSpecialRomanianCharacters(String input) {
     final Map<String, String> replacements = {
       'ș': 's',
@@ -166,6 +161,13 @@ class _RegisterSellPropertyScreenState
       final User? user = FirebaseAuth.instance.currentUser;
 
       if (_formKey.currentState!.validate()) {
+        if (_imageFileList == null || _imageFileList!.isEmpty) {
+          setState(() {
+            _imageError = 'Trebuie să încărcați cel puțin o imagine.';
+          });
+          return; // Opresc execuția funcției dacă nu sunt imagini
+        }
+
         _formKey.currentState!.save();
 
         _imobil.id = user!.uid;
@@ -264,16 +266,6 @@ class _RegisterSellPropertyScreenState
                 selectedValue: _imobil.region,
                 onChanged: (value) => setState(() {
                   _imobil.region = value!;
-
-                  // if (containsSpecialRomanianCharacters(value)) {
-                  //   print(value);
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //     SnackBar(
-                  //       content:
-                  //           Text('Regiunea conține caractere speciale: $value'),
-                  //     ),
-                  //   );
-                  // }
                 }),
               ),
               const SizedBox(height: 10),
@@ -293,15 +285,6 @@ class _RegisterSellPropertyScreenState
                 decoration: customInputDecoration(hintText: "Preț"),
               ),
               const SizedBox(height: 10),
-              // TextFormField(
-              //   controller: _monthsLeaseController,
-              //   validator: (value) =>
-              //       value!.isEmpty ? 'Câmp obligatoriu.' : null,
-              //   keyboardType: TextInputType.number,
-              //   decoration:
-              //       customInputDecoration(hintText: 'Numărul de luni de avans'),
-              // ),
-              // const SizedBox(height: 20),
               const Text(
                 'Informații de bază',
                 style: TextStyle(
@@ -314,13 +297,35 @@ class _RegisterSellPropertyScreenState
                 onImagesSelected: (images) {
                   setState(() {
                     _imageFileList = images;
+                    _imageError =
+                        ''; // Reset error message when images are selected
                   });
                 },
+                imageValidator: () {
+                  if (_imageFileList == null || _imageFileList!.isEmpty) {
+                    return 'Trebuie să încărcați cel puțin o imagine.';
+                  }
+                  return null;
+                },
+              ),
+              Text(
+                _imageError,
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
               ),
               TextFormField(
                 controller: _bathroomController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Băi', prefixIcon: Icons.bathtub),
@@ -328,8 +333,16 @@ class _RegisterSellPropertyScreenState
               const SizedBox(height: 10),
               TextFormField(
                 controller: _roomsController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Dormitoare', prefixIcon: Icons.bed_outlined),
@@ -337,8 +350,16 @@ class _RegisterSellPropertyScreenState
               const SizedBox(height: 10),
               TextFormField(
                 controller: _squareMetersController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Metri pătrați',
@@ -347,8 +368,16 @@ class _RegisterSellPropertyScreenState
               const SizedBox(height: 10),
               TextFormField(
                 controller: _floorController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Etaj', prefixIcon: Icons.stairs_outlined),

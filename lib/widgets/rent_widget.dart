@@ -1,14 +1,16 @@
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:imob_expert/database/Models/house_model.dart';
 import 'package:imob_expert/screens/property_details_screen.dart';
+import 'package:imob_expert/widgets/alert_dialog.dart';
 import 'property_card_widget.dart';
 
 class RentWidget extends StatelessWidget {
   final String searchRegion;
-
-  const RentWidget({super.key, required this.searchRegion});
+  final User? user = FirebaseAuth.instance.currentUser;
+  RentWidget({super.key, required this.searchRegion});
 
   Future<List<HouseModel>> _fetchAllProperties() async {
     // QuerySnapshot vanzariSnapshot;
@@ -95,15 +97,19 @@ class RentWidget extends StatelessWidget {
               bathroom: imovel.bathroom,
               squareMeters: imovel.squareMeters,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PropertyDetailScreen(
-                      imovel: imovel,
-                      // phoneNumber: '',
+                if (user == null) {
+                  alertDialog(context);
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PropertyDetailScreen(
+                        imovel: imovel,
+                        // phoneNumber: '',
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               },
               onDelete: null,
               // onDelete: () async {},

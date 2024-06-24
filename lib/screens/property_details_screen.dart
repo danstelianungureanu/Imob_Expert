@@ -64,6 +64,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
       bool isRead = false;
 
       // Obțineți documentul utilizatorului curent
+
       DocumentSnapshot<Map<String, dynamic>> currentUserDoc =
           await FirebaseFirestore.instance
               .collection('Users')

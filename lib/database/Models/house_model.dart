@@ -20,24 +20,25 @@ class HouseModel {
   Timestamp? dataCriacao;
   String phoneNumber;
 
-  HouseModel(
-      {this.id,
-      // required this.propertyType,
-      required this.type,
-      required this.title,
-      required this.region,
-      required this.address,
-      required this.description,
-      required this.rooms,
-      required this.bathroom,
-      required this.squareMeters,
-      required this.floor,
-      required this.price,
-      required this.monthsLease,
-      required this.facilities,
-      required this.vicinity,
-      required this.images,
-      required this.phoneNumber});
+  HouseModel({
+    this.id,
+    // required this.propertyType,
+    required this.type,
+    required this.title,
+    required this.region,
+    required this.address,
+    required this.description,
+    required this.rooms,
+    required this.bathroom,
+    required this.squareMeters,
+    required this.floor,
+    required this.price,
+    required this.monthsLease,
+    required this.facilities,
+    required this.vicinity,
+    required this.images,
+    required this.phoneNumber,
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -58,7 +59,7 @@ class HouseModel {
       'vicinity': vicinity,
       'images': images,
       'dataCriacao': Timestamp.now(),
-      'phoneNumber': phoneNumber,
+      // 'phoneNumber': phoneNumber,
     };
   }
 
@@ -79,7 +80,8 @@ class HouseModel {
       monthsLease: map['monthsLease'],
       facilities: List<String>.from(map['facilities']),
       vicinity: List<String>.from(map['vicinity']),
-      images: List<String>.from(map['images']), phoneNumber: '',
+      images: List<String>.from(map['images']),
+      phoneNumber: '',
     );
   }
 }

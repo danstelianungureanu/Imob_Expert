@@ -1,16 +1,16 @@
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:imob_expert/database/Models/house_model.dart';
 import 'package:imob_expert/screens/property_details_screen.dart';
+import 'package:imob_expert/widgets/alert_dialog.dart';
 import 'property_card_widget.dart';
-// import 'package:imob_expert/database/Models/imovel.dart';
-// import 'package:imob_expert/database/Models/imovel.dart';
 
 class BuyWidget extends StatelessWidget {
   final String searchRegion;
-
-  const BuyWidget({super.key, required this.searchRegion});
+  final User? user = FirebaseAuth.instance.currentUser;
+  BuyWidget({super.key, required this.searchRegion});
 
   Future<List<HouseModel>> _fetchAllProperties() async {
     // QuerySnapshot vanzariSnapshot;
@@ -97,15 +97,19 @@ class BuyWidget extends StatelessWidget {
               bathroom: imovel.bathroom,
               squareMeters: imovel.squareMeters,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PropertyDetailScreen(
-                      imovel: imovel,
-                      // phoneNumber: '',
+                if (user == null) {
+                  alertDialog(context);
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PropertyDetailScreen(
+                        imovel: imovel,
+                        // phoneNumber: '',
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               },
               onDelete: null,
             );
@@ -114,4 +118,30 @@ class BuyWidget extends StatelessWidget {
       },
     );
   }
+
+  // Future<dynamic> alertDialog(BuildContext context) {
+  //   return showDialog(
+  //                 context: context,
+  //                 builder: (BuildContext context) {
+  //                   return AlertDialog(
+  //                     title: const Text("Eroare"),
+  //                     content: const Text(
+  //                         "Trebuie să te înregistrezi pentru a vedea detalii."),
+  //                     actions: <Widget>[
+  //                       TextButton(
+  //                         child: const Text("Am înțeles"),
+  //                         onPressed: () {
+  //                           Navigator.of(context).pop();
+  //                           Navigator.of(context).push(
+  //                             MaterialPageRoute(
+  //                               builder: (context) => const SignUp(),
+  //                             ),
+  //                           );
+  //                         },
+  //                       ),
+  //                     ],
+  //                   );
+  //                 },
+  //               );
+  // }
 }

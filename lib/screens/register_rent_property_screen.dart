@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, unused_field
 
 import 'dart:io';
 
@@ -34,6 +34,7 @@ class _RegisterRentPropertyScreenState
     extends State<RegisterRentPropertyScreen> {
   final _formKey = GlobalKey<FormState>();
   List<XFile>? _imageFileList = [];
+  String _imageError = '';
 
   final HouseModel _imobil = HouseModel(
     type: '',
@@ -271,16 +272,32 @@ class _RegisterRentPropertyScreenState
               const SizedBox(height: 10),
               TextFormField(
                 controller: _priceController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputDecoration(hintText: "Preț"),
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: _monthsLeaseController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration:
                     customInputDecoration(hintText: 'Numărul de luni de avans'),
@@ -298,17 +315,35 @@ class _RegisterRentPropertyScreenState
                 onImagesSelected: (images) {
                   setState(() {
                     _imageFileList = images;
-                    if (_imageFileList == null || _imageFileList!.isEmpty) {
-                    } else {
-// Resetează mesajul de eroare dacă sunt imagini
-                    }
+                    _imageError =
+                        ''; // Reset error message when images are selected
                   });
                 },
+                imageValidator: () {
+                  if (_imageFileList == null || _imageFileList!.isEmpty) {
+                    return 'Trebuie să încărcați cel puțin o imagine.';
+                  }
+                  return null;
+                },
+              ),
+              Text(
+                _imageError,
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
               ),
               TextFormField(
                 controller: _bathroomController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Băi', prefixIcon: Icons.bathtub),
@@ -316,8 +351,16 @@ class _RegisterRentPropertyScreenState
               const SizedBox(height: 10),
               TextFormField(
                 controller: _roomsController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Dormitoare', prefixIcon: Icons.bed_outlined),
@@ -325,8 +368,16 @@ class _RegisterRentPropertyScreenState
               const SizedBox(height: 10),
               TextFormField(
                 controller: _squareMetersController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Metri pătrați',
@@ -335,8 +386,16 @@ class _RegisterRentPropertyScreenState
               const SizedBox(height: 10),
               TextFormField(
                 controller: _floorController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Câmp obligatoriu.' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Câmp obligatoriu.';
+                  } else if (value.contains(
+                    RegExp(r'[A-Za-z]'),
+                  )) {
+                    return 'Introduceți doar cifre.';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 decoration: customInputIconDecoration(
                     hintText: 'Etaj', prefixIcon: Icons.stairs_outlined),

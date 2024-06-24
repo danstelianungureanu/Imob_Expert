@@ -30,8 +30,8 @@ class _SignUpState extends State<SignUp> {
   final _credit = '';
 
   final _formKey = GlobalKey<FormState>();
-  bool _passwordVisivel = false;
-  bool _passwordConfirmVisivel = false;
+  bool _passwordVisible = false;
+  bool _passwordConfirmVisible = false;
   bool agree = false;
 
   // Funcția pentru a lansa URL-ul
@@ -156,8 +156,8 @@ class _SignUpState extends State<SignUp> {
   @override
   void initState() {
     super.initState();
-    _passwordVisivel = false;
-    _passwordConfirmVisivel = false;
+    _passwordVisible = false;
+    _passwordConfirmVisible = false;
   }
 
   @override
@@ -400,10 +400,16 @@ class _SignUpState extends State<SignUp> {
                         _phoneNumber = value!;
                       },
                       validator: (value) {
-                        if (value == null || value.length != 9) {
+                        if (value == null || value.isEmpty) {
+                          return 'Câmp obligatoriu.';
+                        } else if (value.contains(RegExp(r'[A-Za-z]'))) {
+                          return 'Introduceți doar cifre.';
+                        } else if (value.length != 9) {
                           return 'Numărul de telefon trebuie să conțină 9 cifre .';
                         }
                         return null;
+                        //         }
+                        // return null;
                       },
                     ),
                     const SizedBox(height: 10),
@@ -460,7 +466,7 @@ class _SignUpState extends State<SignUp> {
                           }
                           return null;
                         },
-                        obscureText: !_passwordVisivel,
+                        obscureText: !_passwordVisible,
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
@@ -487,14 +493,14 @@ class _SignUpState extends State<SignUp> {
                             suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    _passwordVisivel = !_passwordVisivel;
+                                    _passwordVisible = !_passwordVisible;
                                   });
                                 },
                                 icon: Icon(
-                                    _passwordVisivel
+                                    _passwordVisible
                                         ? Icons.visibility
                                         : Icons.visibility_off,
-                                    color: _passwordVisivel
+                                    color: _passwordVisible
                                         ? Colors.black
                                         : Colors.grey))),
                         onSaved: (value) {
@@ -512,7 +518,7 @@ class _SignUpState extends State<SignUp> {
                           }
                           return null;
                         },
-                        obscureText: !_passwordConfirmVisivel,
+                        obscureText: !_passwordConfirmVisible,
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
@@ -539,15 +545,15 @@ class _SignUpState extends State<SignUp> {
                             suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    _passwordConfirmVisivel =
-                                        !_passwordConfirmVisivel;
+                                    _passwordConfirmVisible =
+                                        !_passwordConfirmVisible;
                                   });
                                 },
                                 icon: Icon(
-                                    _passwordConfirmVisivel
+                                    _passwordConfirmVisible
                                         ? Icons.visibility
                                         : Icons.visibility_off,
-                                    color: _passwordConfirmVisivel
+                                    color: _passwordConfirmVisible
                                         ? Colors.black
                                         : Colors.grey))),
                         onSaved: (value) {

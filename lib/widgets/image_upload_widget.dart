@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
 
 import 'dart:io';
 
@@ -8,13 +8,15 @@ import 'package:image_picker/image_picker.dart';
 class ImageUploadWidget extends StatefulWidget {
   final List<XFile>? imageFileList;
   final Function(List<XFile>?)? onImagesSelected;
-  final bool isMandatory;
+  // final bool isMandatory;
+  final String? Function()? imageValidator;
 
   const ImageUploadWidget({
     super.key,
     this.imageFileList,
     this.onImagesSelected,
-    this.isMandatory = false,
+    // this.isMandatory = false,
+    this.imageValidator,
   });
 
   @override
@@ -76,7 +78,7 @@ class _ImageUploadWidgetState extends State<ImageUploadWidget> {
                         ),
                         const SizedBox(height: 20),
                         GestureDetector(
-                          child: const Text('Camera'),
+                          child: const Text('Cameră'),
                           onTap: () {
                             Navigator.of(context).pop();
                             _getImage(ImageSource.camera);
@@ -91,13 +93,14 @@ class _ImageUploadWidgetState extends State<ImageUploadWidget> {
           },
           child: const Text('Adaugă imagini'),
         ),
-        if (widget.isMandatory &&
-            (widget.imageFileList == null || widget.imageFileList!.isEmpty))
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0),
+        if (widget.imageValidator != null) // Adaugă această verificare
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              'Selectarea imaginii este obligatorie',
-              style: TextStyle(color: Colors.red),
+              widget.imageValidator!() ?? '',
+              style: const TextStyle(
+                color: Colors.red,
+              ),
             ),
           ),
         const SizedBox(height: 10),
