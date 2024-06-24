@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:intl/intl.dart';
 
 // import '../widgets/reply_message_widget.dart';
-import 'messages_widget.dart';
+import '../../screens/messages_widget.dart';
 // import 'reply_message_screen.dart'; // Asigurați-vă că importăm noul widget
 
 class MyMessages extends StatelessWidget {
