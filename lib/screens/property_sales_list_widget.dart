@@ -108,26 +108,6 @@ class _PropertySalesListWidgetState extends State<PropertySalesListWidget> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        // backgroundColor: Colors.transparent,
-        // elevation: 0,
-        // leading: Builder(
-        //   builder: (context) => IconButton(
-        //     icon: const Padding(
-        //       padding: EdgeInsets.only(left: 12.0),
-        //       child: Icon(
-        //         Icons.keyboard_return_rounded,
-        //         color: Colors.black,
-        //       ),
-        //     ),
-        //     onPressed: () {
-        //       Navigator.of(context).push(
-        //         MaterialPageRoute(
-        //           builder: (context) => const HomeScreen(),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // ),
         title: const Text(
           'Anunțuri de vânzare',
           style: TextStyle(

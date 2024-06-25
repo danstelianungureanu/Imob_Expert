@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:imob_expert/database/Models/house_model.dart';
 import 'package:imob_expert/screens/property_details_screen.dart';
-import 'package:imob_expert/widgets/alert_dialog.dart';
+import 'package:imob_expert/database/Models/alert_dialog.dart';
 import 'property_card_widget.dart';
 
 class BuyWidget extends StatelessWidget {
@@ -13,43 +13,17 @@ class BuyWidget extends StatelessWidget {
   BuyWidget({super.key, required this.searchRegion});
 
   Future<List<HouseModel>> _fetchAllProperties() async {
-    // QuerySnapshot vanzariSnapshot;
-    // QuerySnapshot inchirieriSnapshot;
     QuerySnapshot cumparariSnapshot;
 
     if (searchRegion.isEmpty) {
-      // vanzariSnapshot =
-      //     await FirebaseFirestore.instance.collection('Vanzari').get();
-      // inchirieriSnapshot =
-      //     await FirebaseFirestore.instance.collection('Inchirieri').get();
       cumparariSnapshot =
           await FirebaseFirestore.instance.collection('Cumparari').get();
     } else {
-      // vanzariSnapshot = await FirebaseFirestore.instance
-      //     .collection('Vanzari')
-      //     .where('region', isEqualTo: searchRegion)
-      //     .get();
-      // inchirieriSnapshot = await FirebaseFirestore.instance
-      //     .collection('Inchirieri')
-      //     .where('region', isEqualTo: searchRegion)
-      //     .get();
       cumparariSnapshot = await FirebaseFirestore.instance
           .collection('Cumparari')
           .where('region', isEqualTo: searchRegion)
           .get();
     }
-
-    // final vanzariImoveis = vanzariSnapshot.docs.map((doc) {
-    //   final data = doc.data() as Map<String, dynamic>;
-    //   log('Vanzari document data: $data');
-    //   return Imovel.fromJson(data);
-    // }).toList();
-
-    // final inchirieriImoveis = inchirieriSnapshot.docs.map((doc) {
-    //   final data = doc.data() as Map<String, dynamic>;
-    //   log('Inchirieri document data: $data');
-    //   return Imovel.fromJson(data);
-    // }).toList();
 
     final cumparariImoveis = cumparariSnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
@@ -105,7 +79,6 @@ class BuyWidget extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => PropertyDetailScreen(
                         imovel: imovel,
-                        // phoneNumber: '',
                       ),
                     ),
                   );
@@ -118,30 +91,4 @@ class BuyWidget extends StatelessWidget {
       },
     );
   }
-
-  // Future<dynamic> alertDialog(BuildContext context) {
-  //   return showDialog(
-  //                 context: context,
-  //                 builder: (BuildContext context) {
-  //                   return AlertDialog(
-  //                     title: const Text("Eroare"),
-  //                     content: const Text(
-  //                         "Trebuie să te înregistrezi pentru a vedea detalii."),
-  //                     actions: <Widget>[
-  //                       TextButton(
-  //                         child: const Text("Am înțeles"),
-  //                         onPressed: () {
-  //                           Navigator.of(context).pop();
-  //                           Navigator.of(context).push(
-  //                             MaterialPageRoute(
-  //                               builder: (context) => const SignUp(),
-  //                             ),
-  //                           );
-  //                         },
-  //                       ),
-  //                     ],
-  //                   );
-  //                 },
-  //               );
-  // }
 }

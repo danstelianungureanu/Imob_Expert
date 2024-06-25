@@ -91,7 +91,6 @@ class _SignUpState extends State<SignUp> {
       print('Formular trimis');
     } else {
       // Afișează mesajul de alertă
-      // _showAlertDialog();
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -112,45 +111,6 @@ class _SignUpState extends State<SignUp> {
         },
       );
     }
-
-    // final isValid = _formKey.currentState!.validate();
-
-    // if (isValid) {
-    //   _formKey.currentState!.save();
-    //   try {
-    //     //Guardar o email e o password no Firebase auth
-    //     final userCredentials = await _firebase.createUserWithEmailAndPassword(
-    //         email: _email, password: _password);
-
-    //     final user = newUser(
-    //       id: userCredentials.user!.uid,
-    //       name: _name,
-    //       surname: _surname,
-    //       dateOfBirt: _dateOfBirt,
-    //       phoneNumber: _phoneNumber,
-    //       email: _email,
-    //     );
-
-    //     //Salvați datele rămase Firebase firestore
-    //     // _firebaseFirestore.collection('Users').add(user.toJson());
-    //     _firebaseFirestore
-    //         .collection('Users')
-    //         .doc(userCredentials.user!.uid)
-    //         .set(user.toJson());
-
-    //     Navigator.of(context).push(
-    //       MaterialPageRoute(
-    //         builder: (context) => const HomeScreen(),
-    //       ),
-    //     );
-    //   } on FirebaseAuthException catch (error) {
-    //     if (error.code == 'email-already-in-use') {}
-    //     ScaffoldMessenger.of(context).clearSnackBars();
-    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //         backgroundColor: Colors.red,
-    //         content: Text(error.message ?? "Authentication failed.")));
-    //   }
-    // }
   }
 
   @override
@@ -307,13 +267,7 @@ class _SignUpState extends State<SignUp> {
                           lastDate: DateTime.now(),
                         );
                         var _selectedDate;
-                        // if (pickedDate != null && pickedDate != _selectedDate) {
-                        //   setState(() {
-                        //     _selectedDate = pickedDate;
-                        //     _dateOfBirt =
-                        //         DateFormat('dd/MM/yyyy').format(_selectedDate);
-                        //   });
-                        // }
+
                         if (pickedDate != null && pickedDate != _selectedDate) {
                           final DateTime today = DateTime.now();
                           final DateTime eighteenYearsAgo =
@@ -350,15 +304,7 @@ class _SignUpState extends State<SignUp> {
                       },
                     ),
                     const SizedBox(height: 10),
-                    //
-                    //campo do Contacto
                     TextFormField(
-                      // validator: (value) {
-                      //   if (value!.isEmpty) {
-                      //     return "Insert valid contact";
-                      //   }
-                      //   return null;
-                      // },
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         filled: true,
@@ -390,11 +336,7 @@ class _SignUpState extends State<SignUp> {
                           Icons.phone_android_sharp,
                           color: Colors.grey,
                         ),
-                        //   contentPadding: const EdgeInsets.all(20),
-                        // ),
                         contentPadding: const EdgeInsets.all(20),
-                        // prefixText: '+373 ',
-                        // prefixStyle: const TextStyle(color: Colors.black),
                       ),
                       onSaved: (value) {
                         _phoneNumber = value!;
@@ -408,13 +350,9 @@ class _SignUpState extends State<SignUp> {
                           return 'Numărul de telefon trebuie să conțină 9 cifre .';
                         }
                         return null;
-                        //         }
-                        // return null;
                       },
                     ),
                     const SizedBox(height: 10),
-                    //
-                    //campo do email
                     TextFormField(
                         validator: (value) {
                           if (value == null ||
@@ -457,8 +395,6 @@ class _SignUpState extends State<SignUp> {
                         }),
 
                     const SizedBox(height: 10),
-                    //
-                    //campo do password
                     TextFormField(
                         validator: (value) {
                           if (value == null || value.trim().length < 8) {
@@ -507,8 +443,6 @@ class _SignUpState extends State<SignUp> {
                           _password = value!;
                         }),
                     const SizedBox(height: 10),
-                    //
-                    //campo para confirmar a palavra passe
                     TextFormField(
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -580,9 +514,6 @@ class _SignUpState extends State<SignUp> {
                           'Sunt de acord cu Termenii și Condițiile și Politica de confidențialitate',
                           style: TextStyle(color: Colors.black),
                         ),
-                        // activeColor: const Color.fromRGBO(26, 147, 192, 1),
-                        // controlAffinity: ListTileControlAffinity.leading,
-                        // value: agree,
                       ),
                     ),
 
@@ -592,7 +523,6 @@ class _SignUpState extends State<SignUp> {
                     SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                            //Subtmeter
                             onPressed: _submit,
                             style: TextButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
@@ -608,14 +538,11 @@ class _SignUpState extends State<SignUp> {
                                     fontWeight: FontWeight.w700,
                                     fontSize: 16)))),
 
-                    ///
-                    //botao para registar
                     const SizedBox(height: 40),
                     Align(
                       alignment: Alignment.center,
                       child: TextButton(
                         onPressed: () {
-                          //Navegar a pagina de login (login_screen)
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => const LoginScreen(),

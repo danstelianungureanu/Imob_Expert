@@ -41,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
         if (userDoc.exists) {
           String name = userDoc.data()?['Name'] ?? 'Nume';
           String surname = userDoc.data()?['Surname'] ?? 'Prenume';
-          // String phoneNumber = userDoc.data()?['PhoneNumber'] ?? 'PhoneNumber';
           String credit = userDoc.data()?['Credit'] ?? 'Credit';
 
           return {'name': name, 'surname': surname, 'credit': credit};
@@ -156,14 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.black,
                     ),
                   );
-                  // } else if (snapshot.hasError) {
-                  //   return IconButton(
-                  //     onPressed: () {},
-                  //     icon: const Icon(
-                  //       Icons.error,
-                  //       color: Colors.red,
-                  //     ),
-                  //   );
                 } else {
                   bool messagesExist = snapshot.data ?? false;
                   return IconButton(
@@ -197,12 +188,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (user != null) {
                   return Padding(
                     padding: const EdgeInsets.only(right: 20.0),
-                    child: Text(
-                      '${userData['credit']} \n MDL',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PaymentPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        '${userData['credit']} \n MDL',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   );
@@ -303,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: ListTile(
                       leading: const Icon(
-                        Icons.add,
+                        Icons.my_library_add_rounded,
                         color: Colors.white,
                       ),
                       title: PopupMenuButton<String>(
@@ -318,12 +319,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text('Vânzare'),
                           ),
                           const PopupMenuItem<String>(
-                            value: 'Cumpăr',
-                            child: Text('Cumpăr'),
+                            value: 'Închirieri',
+                            child: Text('Închiriez'),
                           ),
                           const PopupMenuItem<String>(
-                            value: 'Închirieri',
-                            child: Text('Închirieri'),
+                            value: 'Cumpăr',
+                            child: Text('Cumpăr'),
                           ),
                         ],
                         child: const Text(
@@ -333,8 +334,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   )
-                // const SizedBox(),                //  const logOut()
-                //  const DeleteAccount()
                 else
                   InkWell(
                     onTap: () => Navigator.of(context).push(
@@ -362,9 +361,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ]),
                     ),
                   ),
-                // const SizedBox(
-                //   height: 10,
-                // ),
                 if (user != null)
                   //
                   InkWell(
@@ -380,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Row(children: [
                         Icon(
-                          Icons.arrow_right_outlined,
+                          Icons.note_add_rounded,
                           color: Colors.white,
                         ),
                         SizedBox(
@@ -393,7 +389,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ]),
                     ),
                   )
-                // const SizedBox(height: 10)
                 else
                   InkWell(
                     onTap: () => Navigator.of(context).push(
@@ -479,8 +474,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 if (user != null)
-                  // const Text('')
-                  // else
                   const Padding(
                     padding: EdgeInsets.only(top: 400.0),
                     child: Row(
@@ -493,7 +486,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                // Navigator.pop(context);
               ],
             ),
           ],
@@ -501,7 +493,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: ListView(
         children: [
-          //Pesquisar
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             child: Container(
@@ -555,8 +546,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 10),
           const CategoryWidget(),
-          // const ImovelItemWidget(),
-          //const ImovelItemWidget(),
           PropertyListWidget(searchRegion: _searchRegion),
         ],
       ),

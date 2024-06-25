@@ -1,10 +1,8 @@
-// ignore_for_file: avoid_print, duplicate_ignore, sized_box_for_whitespace
+// ignore_for_file: sized_box_for_whitespace
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:imob_expert/widgets/buy_widget.dart';
-
-// import 'home_screen.dart';
 
 class PropertyBuyListWidget extends StatefulWidget {
   const PropertyBuyListWidget({super.key});
@@ -36,30 +34,9 @@ class _PropertyBuyListWidgetState extends State<PropertyBuyListWidget> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        // backgroundColor: Colors.transparent,
-        // elevation: 0,
-        // leading: Builder(
-        //   builder: (context) => IconButton(
-        //     icon: const Padding(
-        //       padding: EdgeInsets.only(left: 12.0),
-        //       child: Icon(
-        //         Icons.ios_,
-        //         color: Colors.black,
-        //       ),
-        //     ),
-        //     onPressed: () {
-        //       Navigator.of(context).push(
-        //         MaterialPageRoute(
-        //           builder: (context) => const HomeScreen(),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // ),
       ),
       body: ListView(
         children: [
-          //Pesquisar
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             child: Container(
@@ -73,7 +50,6 @@ class _PropertyBuyListWidgetState extends State<PropertyBuyListWidget> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   children: [
-                    // const Icon(Icons.search, color: Colors.black),
                     IconButton(
                       icon: const Icon(Icons.search, color: Colors.black),
                       onPressed: _searchProperties,
@@ -100,9 +76,7 @@ class _PropertyBuyListWidgetState extends State<PropertyBuyListWidget> {
               ),
             ),
           ),
-
           const SizedBox(height: 10),
-
           BuyWidget(
             searchRegion: _searchRegion,
           ),

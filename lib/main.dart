@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:imob_expert/firebase_options.dart';
+import 'package:imob_expert/database/firebase_options.dart';
 import 'package:imob_expert/screens/login_screen.dart';
 
 void main() async {

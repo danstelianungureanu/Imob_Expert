@@ -1,10 +1,12 @@
 // ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously, avoid_print, library_private_types_in_public_api
 
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:imob_expert/database/Models/house_model.dart';
-import 'package:imob_expert/widgets/make_call.dart';
+import 'package:imob_expert/database/Models/make_call.dart';
 
 class PropertyDetailScreen extends StatefulWidget {
   final HouseModel imovel;
@@ -299,8 +301,10 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.bathtub,
-                              color: Color.fromRGBO(26, 147, 192, 1)),
+                          const Icon(
+                            Icons.bathtub,
+                            color: Color.fromRGBO(26, 147, 192, 1),
+                          ),
                           const SizedBox(width: 5),
                           if (widget.imovel.bathroom == 1)
                             Text(
@@ -316,8 +320,10 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                       ),
                       Row(
                         children: [
-                          const Icon(Icons.bed,
-                              color: Color.fromRGBO(26, 147, 192, 1)),
+                          const Icon(
+                            Icons.bed,
+                            color: Color.fromRGBO(26, 147, 192, 1),
+                          ),
                           const SizedBox(width: 5),
                           if (widget.imovel.rooms == 1)
                             Text(
@@ -325,13 +331,17 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                               style: const TextStyle(color: Colors.grey),
                             )
                           else
-                            Text('${widget.imovel.rooms.toString()} Camere',
-                                style: const TextStyle(color: Colors.grey)),
+                            Text(
+                              '${widget.imovel.rooms.toString()} Camere',
+                              style: const TextStyle(color: Colors.grey),
+                            ),
                         ],
                       ),
                       Row(children: [
-                        const Icon(Icons.square_foot,
-                            color: Color.fromRGBO(26, 147, 192, 1)),
+                        const Icon(
+                          Icons.square_foot,
+                          color: Color.fromRGBO(26, 147, 192, 1),
+                        ),
                         const SizedBox(width: 5),
                         Text(
                           '${widget.imovel.squareMeters.toString()} m²',
@@ -341,9 +351,13 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  const Text('Descriere',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Descriere',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   Text(
                     widget.imovel.description,
                     style: TextStyle(
@@ -354,9 +368,13 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                     softWrap: true,
                   ),
                   const SizedBox(height: 20),
-                  const Text('Facilități',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Facilități',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 10),
                   Wrap(
                     spacing: 8.0,
@@ -365,25 +383,34 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                       return Chip(
                         label: Text(item),
                         shape: const StadiumBorder(
-                            side: BorderSide(
-                                color: Color.fromRGBO(26, 147, 192, 1))),
+                          side: BorderSide(
+                            color: Color.fromRGBO(26, 147, 192, 1),
+                          ),
+                        ),
                       );
                     }).toList(),
                   ),
                   const SizedBox(height: 20),
-                  const Text('În apropriere',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text(
+                    'În apropriere',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 10),
                   Wrap(
                     spacing: 8.0,
                     runSpacing: 4.0,
                     children: widget.imovel.vicinity.map((item) {
                       return Chip(
-                          label: Text(item),
-                          shape: const StadiumBorder(
-                              side: BorderSide(
-                                  color: Color.fromRGBO(26, 147, 192, 1))));
+                        label: Text(item),
+                        shape: const StadiumBorder(
+                          side: BorderSide(
+                            color: Color.fromRGBO(26, 147, 192, 1),
+                          ),
+                        ),
+                      );
                     }).toList(),
                   ),
                   const SizedBox(height: 20),
@@ -430,8 +457,12 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Text(
-                      'Avansul de plată este ${widget.imovel.monthsLease.toString()} la începerea contractului.'),
+                  if (widget.imovel.monthsLease != 0)
+                    Text(
+                      'Avansul de plată este ${widget.imovel.monthsLease.toString()} la începerea contractului.',
+                    )
+                  else
+                    const Text('Nu se percepe avans.'),
                   const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,

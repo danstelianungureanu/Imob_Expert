@@ -19,6 +19,7 @@ class HouseModel {
   List<String> images;
   Timestamp? dataCriacao;
   String phoneNumber;
+  // String collection;
 
   HouseModel({
     this.id,
@@ -38,6 +39,7 @@ class HouseModel {
     required this.vicinity,
     required this.images,
     required this.phoneNumber,
+    // required this.collection,
   });
 
   Map<String, dynamic> toJson() {
@@ -60,6 +62,7 @@ class HouseModel {
       'images': images,
       'dataCriacao': Timestamp.now(),
       // 'phoneNumber': phoneNumber,
+      // 'collection': collection,
     };
   }
 
@@ -82,6 +85,7 @@ class HouseModel {
       vicinity: List<String>.from(map['vicinity']),
       images: List<String>.from(map['images']),
       phoneNumber: '',
+      //  collection: '',
     );
   }
 }

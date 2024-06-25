@@ -43,6 +43,7 @@ class _RegisterBuyPropertyScreenState extends State<RegisterBuyPropertyScreen> {
     vicinity: [],
     images: [],
     phoneNumber: '',
+    // collection: 'Cumparari',
   );
 
   final TextEditingController _titleController = TextEditingController();
@@ -129,7 +130,7 @@ class _RegisterBuyPropertyScreenState extends State<RegisterBuyPropertyScreen> {
     _imobil.type = widget.propertyType; // Setează tipul de proprietate selectat
   }
 
-  String replaceSpecialRomanianCharacters(String input) {
+  String replaceSpecialCharacters(String input) {
     final Map<String, String> replacements = {
       'ș': 's',
       'Ş': 'S',
@@ -151,38 +152,115 @@ class _RegisterBuyPropertyScreenState extends State<RegisterBuyPropertyScreen> {
       final User? user = FirebaseAuth.instance.currentUser;
 
       if (_formKey.currentState!.validate()) {
-        _formKey.currentState!.save();
+        // if (_imageFileList == null || _imageFileList!.isEmpty) {
+        //   setState(() {
+        //     _imageError = 'Trebuie să încărcați cel puțin o imagine.';
+        //   });
+        //   return; // Opresc execuția funcției dacă nu sunt imagini
+        // }
 
-        _imobil.id = user!.uid;
-        _imobil.title = _titleController.text;
-        _imobil.address = _addressController.text;
-        _imobil.price = int.tryParse(_priceController.text) ?? 0;
-        _imobil.monthsLease = int.tryParse(_monthsLeaseController.text) ?? 0;
-        _imobil.bathroom = int.tryParse(_bathroomController.text) ?? 0;
-        _imobil.rooms = int.tryParse(_roomsController.text) ?? 0;
-        _imobil.squareMeters = int.tryParse(_squareMetersController.text) ?? 0;
-        _imobil.floor = int.tryParse(_floorController.text) ?? 0;
-        _imobil.description = _descriptionController.text;
-        _imobil.region = replaceSpecialRomanianCharacters(_imobil.region);
+        // Verifică dacă utilizatorul are credit
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user!.uid)
+            .get();
 
-        // List<String> imageUrls = await _uploadImagesToStorage();
-        // _imobil.images = imageUrls;
+        if (userDoc.exists) {
+          String creditString = userDoc['Credit'];
 
-        await FirebaseFirestore.instance
-            .collection('Cumparari')
-            .add(_imobil.toJson());
+          double userCredit = double.tryParse(creditString) ?? 0.0;
 
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Registered with success!'),
-          backgroundColor: Colors.green,
-        ));
+          if (userCredit > 9.99) {
+            _formKey.currentState!.save();
 
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ),
-        );
+            _imobil.id = user.uid;
+            _imobil.title = _titleController.text;
+            _imobil.address = _addressController.text;
+            _imobil.price = int.tryParse(_priceController.text) ?? 0;
+            _imobil.monthsLease =
+                int.tryParse(_monthsLeaseController.text) ?? 0;
+            _imobil.bathroom = int.tryParse(_bathroomController.text) ?? 0;
+            _imobil.rooms = int.tryParse(_roomsController.text) ?? 0;
+            _imobil.squareMeters =
+                int.tryParse(_squareMetersController.text) ?? 0;
+            _imobil.floor = int.tryParse(_floorController.text) ?? 0;
+            _imobil.description = _descriptionController.text;
+            _imobil.region = replaceSpecialCharacters(_imobil.region);
+
+            // List<String> imageUrls = await _uploadImagesToStorage();
+            // _imobil.images = imageUrls;
+
+            //
+            await FirebaseFirestore.instance
+                .collection('Cumparari')
+                .add(_imobil.toJson());
+            // Scade 10 credit din valoarea curentă și actualizează în baza de date
+            double newCredit = userCredit - 10.0;
+            await FirebaseFirestore.instance
+                .collection('Users')
+                .doc(user.uid)
+                .update({'Credit': newCredit.toString()});
+            // print((userCredit - 10).toString());
+
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Registered with success!'),
+              backgroundColor: Colors.green,
+            ));
+
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text(
+                    'Avertizare !',
+                    style: TextStyle(
+                        color: Colors.red,
+                        decoration: TextDecoration.underline),
+                  ),
+                  content: const Text(
+                    'Nu aveți suficient credit pentru a plasa anunțul. \nVa rugăm supliniți contul cu minim 10 MDL.',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Anulează'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    TextButton(
+                      child: const Text(
+                        'Am înțeles',
+                        style: TextStyle(
+                          color: Colors.green,
+                        ),
+                      ),
+                      onPressed: () {
+                        // updateCredit();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        } else {}
       }
     } on FirebaseException catch (e) {
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -254,15 +332,6 @@ class _RegisterBuyPropertyScreenState extends State<RegisterBuyPropertyScreen> {
                 decoration: customInputDecoration(hintText: "Preț"),
               ),
               const SizedBox(height: 10),
-              // TextFormField(
-              //   controller: _monthsLeaseController,
-              //   validator: (value) =>
-              //       value!.isEmpty ? 'Câmp obligatoriu.' : null,
-              //   keyboardType: TextInputType.number,
-              //   decoration:
-              //       customInputDecoration(hintText: 'Numărul de luni de avans'),
-              // ),
-              // const SizedBox(height: 20),
               const Text(
                 'Informații de bază',
                 style: TextStyle(
@@ -270,14 +339,6 @@ class _RegisterBuyPropertyScreenState extends State<RegisterBuyPropertyScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // ImageUploadWidget(
-              //   imageFileList: _imageFileList,
-              //   onImagesSelected: (images) {
-              //     setState(() {
-              //       _imageFileList = images;
-              //     });
-              //   },
-              // ),
               const SizedBox(
                 height: 10,
               ),

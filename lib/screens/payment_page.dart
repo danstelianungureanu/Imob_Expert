@@ -1,13 +1,10 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:imob_expert/screens/home_screen.dart';
 import 'package:imob_expert/screens/login_screen.dart';
-// import 'package:imob_expert/screens/my_details.dart';
-import 'package:imob_expert/widgets/my_buttons.dart';
+import 'package:imob_expert/database/Models/my_buttons.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
@@ -23,7 +20,7 @@ class _PaymentPageState extends State<PaymentPage> {
   String cardHolderName = '';
   String cvvCode = '';
   bool isCvvFocused = false;
-  String amount = ''; // Adăugăm un câmp pentru suma de plată
+  String amount = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -34,7 +31,6 @@ class _PaymentPageState extends State<PaymentPage> {
   void initState() {
     super.initState();
     _loadUserData();
-    // _showConfirmationDialog(context);
   }
 
   Future<void> _loadUserData() async {
@@ -65,7 +61,7 @@ class _PaymentPageState extends State<PaymentPage> {
         return AlertDialog(
           title: const Text('Confirmare'),
           content: Text(
-            'Acest cont v-a fi suplinit cu $amount MDL.\nDacă confirmi, te rugam să te loghezi din nou.',
+            'Acest cont v-a fi suplinit cu $amount MDL.\nPentru siguranță, te rugam să te loghezi din nou.',
             style: const TextStyle(
               color: Colors.red,
             ),
@@ -88,7 +84,6 @@ class _PaymentPageState extends State<PaymentPage> {
                     builder: (context) => const LoginScreen(),
                   ),
                 );
-                // const SignUp();
               },
             ),
           ],
@@ -100,7 +95,6 @@ class _PaymentPageState extends State<PaymentPage> {
   void updateCredit() async {
     double amountToAdd = _convertToDouble(amount);
     if (amountToAdd == 0.0) {
-      print("Amount to add is zero or invalid, skipping update.");
       return;
     }
 
@@ -116,14 +110,9 @@ class _PaymentPageState extends State<PaymentPage> {
 
       double currentCredit = _convertToDouble(snapshot['Credit']);
       double newCredit = currentCredit + amountToAdd;
-      print("Current Credit: $currentCredit");
-      print("Amount: $amount");
-      print("New Credit: $newCredit");
 
       transaction.update(userRef, {'Credit': newCredit.toString()});
     }).then((value) {
-      print("Credit updated successfully!");
-
       setState(() {
         userData!['Credit'] =
             (double.parse(userData!['Credit']) + amountToAdd).toString();
@@ -139,7 +128,7 @@ class _PaymentPageState extends State<PaymentPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text('Plată'),
+        title: const Text('Alimentează contul'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -188,7 +177,6 @@ class _PaymentPageState extends State<PaymentPage> {
                 onChanged: (value) {
                   setState(() {
                     amount = value;
-                    print("Amount onChanged: $amount");
                   });
                 },
               ),
@@ -200,18 +188,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     onTap: () {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
-                        print(
-                            "Amount before update: $amount"); // Debugging print statement
                         _showConfirmationDialog(context);
-                        // updateCredit();
-                        // Navigator.pushAndRemoveUntil(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const HomeScreen(),
-                        //   ),
-                        //   (route) => false, // remove all other routes
-                        //   // );
-                        // );
                       }
                     },
                     text: 'Plătește',

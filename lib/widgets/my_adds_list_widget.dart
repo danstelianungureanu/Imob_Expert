@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:imob_expert/database/Models/house_model.dart';
@@ -52,19 +51,16 @@ class MyAddsListWidget extends StatelessWidget {
 
     final vanzariImoveis = vanzariSnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
-      log('Vanzari document data: $data');
       return HouseModel.fromJson(data);
     }).toList();
 
     final inchirieriImoveis = inchirieriSnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
-      log('Inchirieri document data: $data');
       return HouseModel.fromJson(data);
     }).toList();
 
     final cumparariImoveis = cumparariSnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
-      log('Cumparari document data: $data');
       return HouseModel.fromJson(data);
     }).toList();
 
@@ -80,7 +76,6 @@ class MyAddsListWidget extends StatelessWidget {
       final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('Vanzari')
           .where('id', isEqualTo: userId) // Verificăm id-ul userului
-          // .where('documentId', isEqualTo: docId) // Verificăm id-ul documentului
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
@@ -89,7 +84,6 @@ class MyAddsListWidget extends StatelessWidget {
             .collection('Vanzari')
             .doc(documentId)
             .delete();
-        log('Anunț șters din Vânzari: $docId');
       } else {
         throw 'Document not found or user does not have permission to delete';
       }
@@ -103,7 +97,6 @@ class MyAddsListWidget extends StatelessWidget {
       final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('Cumparari')
           .where('id', isEqualTo: userId) // Verificăm id-ul userului
-          // .where('documentId', isEqualTo: docId) // Verificăm id-ul documentului
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
@@ -112,7 +105,6 @@ class MyAddsListWidget extends StatelessWidget {
             .collection('Cumparari')
             .doc(documentId)
             .delete();
-        log('Anunț șters din Cumparari: $docId');
       } else {
         throw 'Document not found or user does not have permission to delete';
       }
@@ -126,7 +118,6 @@ class MyAddsListWidget extends StatelessWidget {
       final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('Inchirieri')
           .where('id', isEqualTo: userId) // Verificăm id-ul userului
-          // .where('documentId', isEqualTo: docId) // Verificăm id-ul documentului
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
@@ -135,7 +126,6 @@ class MyAddsListWidget extends StatelessWidget {
             .collection('Inchirieri')
             .doc(documentId)
             .delete();
-        log('Anunț șters din Cumparari: $docId');
       } else {
         throw 'Document not found or user does not have permission to delete';
       }
@@ -178,7 +168,6 @@ class MyAddsListWidget extends StatelessWidget {
                     const SnackBar(content: Text('Anunț șters')),
                   );
                 } catch (e) {
-                  // _deleteSellProperty(imovel.id!);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Anunțul nu a fost sters șters'),

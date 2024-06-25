@@ -57,7 +57,7 @@ class _MyDetailsPageState extends State<MyDetailsPage> {
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-              content: Text('Informațiile au fost actualizate cu succes')),
+              content: Text('Informațiile au fost actualizate cu succes.')),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -82,15 +82,21 @@ class _MyDetailsPageState extends State<MyDetailsPage> {
       body: userData == null
           ? const Center(child: CircularProgressIndicator())
           : Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 6.0,
+                vertical: 10,
+              ),
               child: Form(
                 key: _formKey,
                 child: ListView(
                   children: [
                     myDetailsBuildContainer(
                         child: TextFormField(
+                      style: const TextStyle(fontSize: 15),
                       controller: _nameController,
-                      decoration: const InputDecoration(labelText: 'Nume'),
+                      textAlign: TextAlign.start,
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Câmp obligatoriu.';
@@ -100,8 +106,10 @@ class _MyDetailsPageState extends State<MyDetailsPage> {
                     )),
                     myDetailsBuildContainer(
                         child: TextFormField(
+                      style: const TextStyle(fontSize: 15),
                       controller: _surnameController,
-                      decoration: const InputDecoration(labelText: 'Prenume'),
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Câmp obligatoriu.';
@@ -110,30 +118,42 @@ class _MyDetailsPageState extends State<MyDetailsPage> {
                       },
                     )),
                     myDetailsBuildContainer(
-                        child: TextFormField(
-                      controller: _phoneNumberController,
-                      decoration: const InputDecoration(labelText: 'Telefon'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Câmp obligatoriu.';
-                        }
-                        return null;
-                      },
-                    )),
+                      child: TextFormField(
+                        style: const TextStyle(fontSize: 15),
+                        controller: _phoneNumberController,
+                        decoration:
+                            const InputDecoration(border: InputBorder.none),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Câmp obligatoriu.';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
                     myDetailsBuildContainer(
                         child: Text(
                       'Email: ${userData!['Email'] ?? 'N/A'}',
-                      style: const TextStyle(fontSize: 18),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     )),
                     myDetailsBuildContainer(
                         child: Text(
                       'Data nașterii: ${userData!['DateOfBirt'] ?? 'N/A'}',
-                      style: const TextStyle(fontSize: 18),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     )),
                     myDetailsBuildContainer(
                         child: Text(
                       'Depozitul actual: ${userData!['Credit']?.isEmpty == true ? '0' : userData!['Credit']}/MDL',
-                      style: const TextStyle(fontSize: 18),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     )),
                     const SizedBox(height: 20),
                     ElevatedButton(

@@ -1,12 +1,11 @@
 // ignore_for_file: avoid_print, avoid_function_literals_in_foreach_calls
 
-import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:imob_expert/database/Models/house_model.dart';
 import 'package:imob_expert/screens/property_details_screen.dart';
-import 'package:imob_expert/widgets/alert_dialog.dart';
+import 'package:imob_expert/database/Models/alert_dialog.dart';
 import 'property_card_widget.dart';
 
 class PropertyListWidget extends StatelessWidget {
@@ -44,19 +43,16 @@ class PropertyListWidget extends StatelessWidget {
 
     final vanzariImoveis = vanzariSnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
-      log('Vanzari document data: $data');
       return HouseModel.fromJson(data);
     }).toList();
 
     final inchirieriImoveis = inchirieriSnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
-      log('Inchirieri document data: $data');
       return HouseModel.fromJson(data);
     }).toList();
 
     final cumparariImoveis = cumparariSnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
-      log('Cumparari document data: $data');
       return HouseModel.fromJson(data);
     }).toList();
 
@@ -74,11 +70,7 @@ class PropertyListWidget extends StatelessWidget {
           .get();
 
       // Iterăm prin documentele din colecție
-      querySnapshot.docs.forEach((doc) {
-        // print('ID document: ${doc.id}');
-        // print('Data document: ${doc.data()}');
-        // Aici poți procesa datele fiecărui document cum dorești
-      });
+      querySnapshot.docs.forEach((doc) {});
     } catch (e) {
       print('Error reading Vanzari collection: $e');
     }
@@ -125,14 +117,12 @@ class PropertyListWidget extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => PropertyDetailScreen(
                         imovel: imovel,
-                        // phoneNumber: '',
                       ),
                     ),
                   );
                 }
               },
               onDelete: null,
-              // onDelete: () async {},
             );
           },
         );
