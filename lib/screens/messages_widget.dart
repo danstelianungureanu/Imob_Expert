@@ -104,7 +104,7 @@ class messagesWidget extends StatelessWidget {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        InkWell(
+                        GestureDetector(
                           onTap: () {
                             FirebaseFirestore.instance
                                 .collection('Messages')
@@ -112,14 +112,16 @@ class messagesWidget extends StatelessWidget {
                                 .update({
                               'messages': FieldValue.arrayRemove([messageData])
                             }).then((_) {
-                              messageData['isRead'] = true;
+                              // messageData['isRead'] = true;
                               FirebaseFirestore.instance
                                   .collection('Messages')
                                   .doc(snapshot.data!.docs[index].id)
-                                  .update({
-                                'messages':
-                                    FieldValue.arrayUnion([messageData]),
-                              });
+                                  .delete(
+                                      // {
+                                      // 'messages':
+                                      // FieldValue.arrayUnion([messageData]),
+                                      // }
+                                      );
                             });
                           },
                           child: Icon(Icons.markunread, color: Colors.red[700]),
@@ -127,7 +129,7 @@ class messagesWidget extends StatelessWidget {
                         const SizedBox(
                           width: 30,
                         ),
-                        InkWell(
+                        GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,

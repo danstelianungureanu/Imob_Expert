@@ -24,10 +24,25 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+// @override
+// void initState() {;
+//   super.initState();
+//   // _loadUserData();
+// }
+
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _getUserData();
+    _checkMessages();
+    // _refresh();
+  }
+
   final User? user = FirebaseAuth.instance.currentUser;
   final TextEditingController _searchController = TextEditingController();
   String _searchRegion = '';
+  double credit = 0.0;
 
   Future<Map<String, String>> _getUserData() async {
     if (user != null) {
@@ -115,6 +130,16 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Functie de refresh
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+      // _items = List.generate(20, (index) => 'Item refăcut $index');
+      _checkMessages();
+      _getUserData();
+    });
+  }
+
   void _searchProperties() {
     setState(() {
       _searchRegion = _searchController.text.trim();
@@ -188,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (user != null) {
                   return Padding(
                     padding: const EdgeInsets.only(right: 20.0),
-                    child: InkWell(
+                    child: GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
@@ -272,10 +297,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       } else {
                         final userData = snapshot.data!;
-                        return InkWell(
+                        credit == userData['credit'];
+
+                        return GestureDetector(
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const MyDetailsPage(),
+                              builder: (context) => user != null
+                                  ? const MyDetailsPage()
+                                  // user not loged in
+                                  : const LoginScreen(),
                             ),
                           ),
                           child: ListTile(
@@ -293,10 +323,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
-                // const SizedBox(
-                //   height: 10,
-                // ),
                 if (user != null)
+                  // final userData = snapshot.data!;
                   Padding(
                     padding: const EdgeInsets.only(
                       left: 25.0,
@@ -312,21 +340,40 @@ class _HomeScreenState extends State<HomeScreen> {
                           print('Selected: $result'); // Log selected value
                           _navigateToRegisterProperty(context, result);
                         },
-                        itemBuilder: (BuildContext context) =>
-                            <PopupMenuEntry<String>>[
-                          const PopupMenuItem<String>(
-                            value: 'Vânzare',
-                            child: Text('Vânzare'),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'Închirieri',
-                            child: Text('Închiriez'),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'Cumpăr',
-                            child: Text('Cumpăr'),
-                          ),
-                        ],
+                        itemBuilder: (BuildContext context) => credit > 9.99
+                            ? <PopupMenuEntry<String>>[
+                                PopupMenuItem<String>(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PaymentPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Eroare , \nNu aveți suficiente resurse. Vă rugam sa supliniți contul.',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ]
+                            : <PopupMenuEntry<String>>[
+                                const PopupMenuItem<String>(
+                                  value: 'Vânzare',
+                                  child: Text('Vânzare'),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: 'Închirieri',
+                                  child: Text('Închiriez'),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: 'Cumpăr',
+                                  child: Text('Cumpăr'),
+                                ),
+                              ],
                         child: const Text(
                           "Adaugă anunț",
                           style: TextStyle(color: Colors.white),
@@ -335,7 +382,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )
                 else
-                  InkWell(
+                  GestureDetector(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const SignUp(),
@@ -363,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 if (user != null)
                   //
-                  InkWell(
+                  GestureDetector(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const MyAdds(),
@@ -390,7 +437,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )
                 else
-                  InkWell(
+                  GestureDetector(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const LoginScreen(),
@@ -420,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 10,
                 ),
                 if (user != null)
-                  InkWell(
+                  GestureDetector(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const PaymentPage(),
@@ -447,7 +494,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 10,
                 ),
                 if (user != null)
-                  InkWell(
+                  GestureDetector(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const MyMessages(),
@@ -491,63 +538,66 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.search, color: Colors.black),
-                      onPressed: _searchProperties,
-                    ),
-                    Container(
-                      height: 50,
-                      width: 200,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: TextFormField(
-                          controller: _searchController,
-                          decoration: const InputDecoration(
-                            hintText: 'Căutați o locație',
-                            border: InputBorder.none,
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              child: Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.search, color: Colors.black),
+                        onPressed: _searchProperties,
+                      ),
+                      Container(
+                        height: 50,
+                        width: 200,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: TextFormField(
+                            controller: _searchController,
+                            decoration: const InputDecoration(
+                              hintText: 'Căutați o locație',
+                              border: InputBorder.none,
+                            ),
+                            onFieldSubmitted: (value) {
+                              _searchProperties();
+                            },
                           ),
-                          onFieldSubmitted: (value) {
-                            _searchProperties();
-                          },
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          //Categoria
-          const Padding(
-            padding: EdgeInsets.only(top: 10, left: 20),
-            child: Text(
-              'Categorii',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+            //Categoria
+            const Padding(
+              padding: EdgeInsets.only(top: 10, left: 20),
+              child: Text(
+                'Categorii',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          const CategoryWidget(),
-          PropertyListWidget(searchRegion: _searchRegion),
-        ],
+            const SizedBox(height: 10),
+            const CategoryWidget(),
+            PropertyListWidget(searchRegion: _searchRegion),
+          ],
+        ),
       ),
     );
   }

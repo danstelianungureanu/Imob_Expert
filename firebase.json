@@ -1,1 +1,10 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"imob-expert","appId":"1:1007210607013:android:c0607944f381c430f1384c","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"imob-expert","configurations":{"android":"1:1007210607013:android:c0607944f381c430f1384c","ios":"1:1007210607013:ios:a23a5333069df0a1f1384c","macos":"1:1007210607013:ios:a23a5333069df0a1f1384c","web":"1:1007210607013:web:79f671c730ede2b8f1384c","windows":"1:1007210607013:web:04f688ae8403ee32f1384c"}}}}}}
+{
+    "hosting": {
+        "public": "public",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ]
+    }
+}

@@ -1,10 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:imob_expert/screens/home_screen.dart';
-import 'package:imob_expert/screens/login_screen.dart';
 import 'package:imob_expert/database/Models/my_buttons.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
@@ -61,7 +65,7 @@ class _PaymentPageState extends State<PaymentPage> {
         return AlertDialog(
           title: const Text('Confirmare'),
           content: Text(
-            'Acest cont v-a fi suplinit cu $amount MDL.\nPentru siguranță, te rugam să te loghezi din nou.',
+            'Acest cont va fi suplinit cu $amount MDL.',
             style: const TextStyle(
               color: Colors.red,
             ),
@@ -76,12 +80,12 @@ class _PaymentPageState extends State<PaymentPage> {
             TextButton(
               child: const Text('Confirmă'),
               onPressed: () {
+                makeStripePayment(amount); // Apelează metoda Stripe
                 updateCredit();
                 Navigator.of(context).pop();
-                FirebaseAuth.instance.signOut();
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
+                    builder: (context) => const HomeScreen(),
                   ),
                 );
               },
@@ -156,11 +160,16 @@ class _PaymentPageState extends State<PaymentPage> {
                     cardHolderName = data.cardHolderName;
                     cvvCode = data.cvvCode;
                   });
+
+                  // Afișare date card în consolă
+                  print('Card Number: $cardNumber');
+                  print('Expiry Date: $expiryDate');
+                  print('Card Holder Name: $cardHolderName');
+                  print('CVV Code: $cvvCode');
                 },
                 formKey: formKey,
               ),
               const SizedBox(height: 20),
-              // Adăugăm câmpul pentru suma de plată cu prefixul MDL
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Suma de plată',
@@ -178,6 +187,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   setState(() {
                     amount = value;
                   });
+                  print('Suma introdusă: $amount MDL');
                 },
               ),
               const SizedBox(height: 20),
@@ -188,6 +198,15 @@ class _PaymentPageState extends State<PaymentPage> {
                     onTap: () {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
+
+                        // Afișare date completate
+                        print('=== Date introduse de utilizator ===');
+                        print('Card Number: $cardNumber');
+                        print('Expiry Date: $expiryDate');
+                        print('Card Holder Name: $cardHolderName');
+                        print('CVV Code: $cvvCode');
+                        print('Suma de plată: $amount MDL');
+
                         _showConfirmationDialog(context);
                       }
                     },
@@ -201,17 +220,46 @@ class _PaymentPageState extends State<PaymentPage> {
                           builder: (context) => const HomeScreen(),
                         ),
                       );
-                      // }
                     },
                     text: 'Anulează',
                   ),
                 ],
               ),
-              // const SizedBox(height: 20),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+Future<void> makeStripePayment(String amount) async {
+  try {
+    // 1. Creează un PaymentIntent pe server (aici simulăm cu un request simplu)
+    final response = await http.post(
+      Uri.parse(
+          'https://your-server.com/create-payment-intent'), // Serverul tău
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'amount': int.parse(amount) * 100, 'currency': 'mdl'}),
+    );
+
+    final paymentIntentData = jsonDecode(response.body);
+
+    // 2. Inițiază plata cu Stripe
+    await Stripe.instance.initPaymentSheet(
+      paymentSheetParameters: SetupPaymentSheetParameters(
+        paymentIntentClientSecret: paymentIntentData[
+            'sk_test_51PSfNKP4bUyQSoutcUSXX8FRfUAUys3M4URkCCNuWXgCM2V17m05KX6cQBc4ZRklzYB9Y5SbmUBTEVsOgmwaMS5t00msUVVAyE'],
+        merchantDisplayName: 'ImobExpert',
+        style: ThemeMode.light,
+      ),
+    );
+
+    // 3. Afișează sheet-ul pentru finalizarea plății
+    await Stripe.instance.presentPaymentSheet();
+
+    print('Plata a fost efectuată cu succes!');
+  } catch (e) {
+    print('Eroare la plată: $e');
   }
 }
