@@ -42,7 +42,9 @@ Your Rights You have the following rights regarding your personal information:
 Right to Access: You have the right to request a copy of the personal information we hold about you. Right to Rectification: You have the right to request the correction of inaccurate or incomplete information. Right to Deletion: You have the right to request the deletion of your personal information. Right to Object: You have the right to object to the processing of your personal information. 7. Changes to the Privacy Policy We may update this Privacy Policy periodically. We will notify you of any changes by posting the new policy on our website. We encourage you to review this page periodically to stay informed about our privacy practices.
 
 Contact For questions or concerns regarding this Privacy Policy, please contact us at:
-Imob Expert Address: Email: Phone:
+Imob Expert Address: 
+Email: 
+Phone:
 
 This Privacy Policy is effective as of [20/06/2024].
 # Imob_Expert
